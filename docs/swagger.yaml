@@ -1,0 +1,180 @@
+basePath: /api/v1/subscriptions
+definitions:
+  models.CUSubscription:
+    properties:
+      end_date:
+        example: 12-2025
+        type: string
+      price:
+        example: 100
+        type: integer
+      service_name:
+        example: netflix
+        type: string
+      start_date:
+        example: 01-2025
+        type: string
+      user_id:
+        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        type: string
+    required:
+    - service_name
+    type: object
+  models.PeriodRequest:
+    properties:
+      end:
+        example: 12-2025
+        type: string
+      service_name:
+        example: netflix
+        type: string
+      start:
+        example: 01-2025
+        type: string
+      user_id:
+        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        type: string
+    required:
+    - end
+    - start
+    type: object
+  models.Subscription:
+    properties:
+      end_date:
+        example: 12-2025
+        type: string
+      id:
+        type: integer
+      price:
+        example: 100
+        type: integer
+      service_name:
+        example: netflix
+        type: string
+      start_date:
+        example: 12-2025
+        type: string
+      user_id:
+        example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        type: string
+    required:
+    - price
+    - service_name
+    - start_date
+    - user_id
+    type: object
+info:
+  contact:
+    email: iliagurov@ya.ru
+    name: API Support
+  description: API для управления подписками
+  termsOfService: http://swagger.io/terms/
+  title: Subscription Service API
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: Получает список всех подписок
+      produces:
+      - application/json
+      responses: {}
+      summary: Получение списка подписок
+      tags:
+      - subscriptions
+    post:
+      consumes:
+      - application/json
+      description: Создает подписку с указанными параметрами
+      parameters:
+      - description: Данные для создания подписки
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.CUSubscription'
+      produces:
+      - application/json
+      responses: {}
+      summary: Создание подписки
+      tags:
+      - subscriptions
+  /{id}:
+    delete:
+      description: Удаляет подписку по ID
+      parameters:
+      - description: ID подписки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+      summary: Удаление подписки
+      tags:
+      - subscriptions
+    get:
+      description: Получает информацию по подписке по ID
+      parameters:
+      - description: ID подписки
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Подписка
+          schema:
+            $ref: '#/definitions/models.Subscription'
+      summary: Получение инфо о подписке
+      tags:
+      - subscriptions
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные существующей подписки по ID
+      parameters:
+      - description: ID подписки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные подписки
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.CUSubscription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Подписка успешно обновлена
+          schema:
+            $ref: '#/definitions/models.Subscription'
+      summary: Обновление подписки
+      tags:
+      - subscriptions
+  /get_for_period:
+    post:
+      consumes:
+      - application/json
+      description: Выдает сумму всех подписок по указанным фильтрам за период
+      parameters:
+      - description: Фильтры
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.PeriodRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: Получение суммы за период
+      tags:
+      - subscriptions
+swagger: "2.0"
